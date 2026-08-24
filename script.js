@@ -57,23 +57,20 @@ function typeEffect() {
 
   if (!isDeleting && charIndex === currentWord.length) {
     isDeleting = true;
-    typingSpeed = 1800; // Pause before deleting
+    typingSpeed = 1800;
   } else if (isDeleting && charIndex === 0) {
     isDeleting = false;
     wordIndex = (wordIndex + 1) % words.length;
-    typingSpeed = 400; // Pause before typing next word
+    typingSpeed = 400;
   }
 
   setTimeout(typeEffect, typingSpeed);
 }
 
+// Scroll Reveal Observer
 document.addEventListener('DOMContentLoaded', () => {
-  // Start Typewriter
-  if (typingText) {
-    setTimeout(typeEffect, 500);
-  }
+  if (typingText) setTimeout(typeEffect, 400);
 
-  // Scroll Reveal Observer
   const observerOptions = {
     root: null,
     rootMargin: '0px',
