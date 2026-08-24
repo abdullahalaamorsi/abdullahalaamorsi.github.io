@@ -21,7 +21,6 @@ menuBtn.addEventListener('click', () => {
   navLinks.classList.toggle('active');
 });
 
-// Close mobile menu when clicking any navigation link
 navItems.forEach(item => {
   item.addEventListener('click', () => {
     menuBtn.classList.remove('open');
@@ -29,25 +28,68 @@ navItems.forEach(item => {
   });
 });
 
-// Scroll Reveal Observer
-const observerOptions = {
-  root: null,
-  rootMargin: '0px',
-  threshold: 0.15
-};
+// Typewriter Effect for Dynamic Titles
+const typingText = document.querySelector('.typing-text');
+const words = [
+  'Software Engineer',
+  'UI/UX Designer',
+  'Frontend Developer',
+  'Full Stack Aspirant'
+];
 
-const revealCallback = (entries, observer) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('active');
-      observer.unobserve(entry.target);
-    }
-  });
-};
+let wordIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+let typingSpeed = 100;
 
-const scrollObserver = new IntersectionObserver(revealCallback, observerOptions);
+function typeEffect() {
+  const currentWord = words[wordIndex];
+  
+  if (isDeleting) {
+    typingText.textContent = currentWord.substring(0, charIndex - 1);
+    charIndex--;
+    typingSpeed = 50;
+  } else {
+    typingText.textContent = currentWord.substring(0, charIndex + 1);
+    charIndex++;
+    typingSpeed = 100;
+  }
+
+  if (!isDeleting && charIndex === currentWord.length) {
+    isDeleting = true;
+    typingSpeed = 1800; // Pause before deleting
+  } else if (isDeleting && charIndex === 0) {
+    isDeleting = false;
+    wordIndex = (wordIndex + 1) % words.length;
+    typingSpeed = 400; // Pause before typing next word
+  }
+
+  setTimeout(typeEffect, typingSpeed);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Start Typewriter
+  if (typingText) {
+    setTimeout(typeEffect, 500);
+  }
+
+  // Scroll Reveal Observer
+  const observerOptions = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0.15
+  };
+
+  const revealCallback = (entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
+    });
+  };
+
+  const scrollObserver = new IntersectionObserver(revealCallback, observerOptions);
   const animatedElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
   animatedElements.forEach(el => scrollObserver.observe(el));
 });
